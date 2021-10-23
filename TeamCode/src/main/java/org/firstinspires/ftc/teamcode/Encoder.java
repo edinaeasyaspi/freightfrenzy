@@ -31,8 +31,10 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cGyro;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 
@@ -66,16 +68,13 @@ public class Encoder extends LinearOpMode {
         telemetry.addData("Status", "Initialized");
         telemetry.update();
 
-        leftMotor = hardwareMap.dcMotor.get("Left_Motor");
-        rightMotor = hardwareMap.dcMotor.get("Right_Motor");
-        leftMotor2 = hardwareMap.dcMotor.get("Left_Motor2");
-        rightMotor2 = hardwareMap.dcMotor.get("Right_Motor2");
+        leftMotor = hardwareMap.dcMotor.get("fl");
+        rightMotor = hardwareMap.dcMotor.get("rb");
+        leftMotor2 = hardwareMap.dcMotor.get("lb");
+        rightMotor2 = hardwareMap.dcMotor.get("fr");
 
-
-        leftMotor.setDirection(DcMotor.Direction.FORWARD);
         rightMotor.setDirection(DcMotor.Direction.REVERSE);
-        leftMotor2.setDirection(DcMotor.Direction.REVERSE);
-        rightMotor2.setDirection(DcMotor.Direction.FORWARD);
+        rightMotor2.setDirection(DcMotor.Direction.REVERSE);
 
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
