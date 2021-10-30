@@ -15,8 +15,8 @@ public class MyTeleop extends LinearOpMode {
     // Declare OpMode members.
     MyHardware robot = new MyHardware();
     private ElapsedTime runtime = new ElapsedTime();
-   // double clawPosition = robot.CLAW_HOME;
-   // final double CLAW_SPEED = 0.01;
+    double clawPosition = robot.CLAW_HOME;
+    final double CLAW_SPEED = 0.01;
 
     @Override
     public void runOpMode() {
@@ -39,7 +39,7 @@ public class MyTeleop extends LinearOpMode {
 
             leftPower2 = gamepad2.left_stick_x;
             rightPower2 = gamepad2.right_stick_x;
-            //left = -gamepad1.left_stick_y;
+            left = -gamepad1.left_stick_y;
 
             //Forward and backward
             robot.leftMotorBack.setPower(leftPower2);
@@ -54,17 +54,17 @@ public class MyTeleop extends LinearOpMode {
             robot.rightMotorFront.setPower(-rightPower);
 
 
-           // if (gamepad1.a)
-             //   clawPosition += CLAW_SPEED;
-            //else if (gamepad1.y)
-              //  clawPosition -= CLAW_SPEED;
+            if (gamepad1.a)
+                clawPosition += CLAW_SPEED;
+            else if (gamepad1.y)
+                clawPosition -= CLAW_SPEED;
 
-//            robot.arm.setPower(left);
-  //          clawPosition = Range.clip(clawPosition, robot.CLAW_MIN_RANGE, robot.CLAW_MAX_RANGE);
-    //        robot.claw.setPosition(clawPosition);
+            robot.arm.setPower(left);
+            clawPosition = Range.clip(clawPosition, robot.CLAW_MIN_RANGE, robot.CLAW_MAX_RANGE);
+            robot.claw.setPosition(clawPosition);
 
-          //  telemetry.addData("claw", "%.2f", clawPosition);
-           // telemetry.addData("left", "%.2f", left);
+            telemetry.addData("claw", "%.2f", clawPosition);
+            telemetry.addData("left", "%.2f", left);
             telemetry.addData("Status", "Run Time: " + runtime.toString());
             telemetry.addData("Motors", "left (%.2f), right (%.2f)", leftPower, rightPower);
 
