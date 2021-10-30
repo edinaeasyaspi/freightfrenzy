@@ -56,17 +56,15 @@ public class piBasicOpMode_Linear extends LinearOpMode {
         // Initialize the hardware variables. Note that the strings used here as parameters
         // to 'get' must correspond to the names assigned during the robot configuration
         // step (using the FTC Robot Controller app on the phone).
-        leftBackMotor  = hardwareMap.get(DcMotor.class, "left_drive");
-        rightBackMotor = hardwareMap.get(DcMotor.class, "right_drive");
-        leftFrontMotor  = hardwareMap.get(DcMotor.class, "left_drive");
-        rightFrontMotor = hardwareMap.get(DcMotor.class, "right_drive");
+        leftBackMotor  = hardwareMap.get(DcMotor.class, "lb");
+        rightBackMotor = hardwareMap.get(DcMotor.class, "rb");
+        leftFrontMotor  = hardwareMap.get(DcMotor.class, "fl");
+        rightFrontMotor = hardwareMap.get(DcMotor.class, "fr");
 
         // Most robots need the motor on one side to be reversed to drive forward
         // Reverse the motor that runs backwards when connected directly to the battery
-        leftBackMotor.setDirection(DcMotor.Direction.FORWARD);
-        rightBackMotor.setDirection(DcMotor.Direction.FORWARD);
+        leftBackMotor.setDirection(DcMotor.Direction.REVERSE);
         leftFrontMotor.setDirection(DcMotor.Direction.REVERSE);
-        rightFrontMotor.setDirection(DcMotor.Direction.REVERSE);
 
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
@@ -78,6 +76,8 @@ public class piBasicOpMode_Linear extends LinearOpMode {
             // Setup a variable for each drive wheel to save power level for telemetry
             double leftPower;
             double rightPower;
+            double leftPower2;
+            double rightPower2;
 
             // POV Mode uses left stick to go forward, and right stick to turn.
             // - This uses basic math to combine motions and is easier to drive straight.
@@ -88,14 +88,22 @@ public class piBasicOpMode_Linear extends LinearOpMode {
 
              //Tank Mode uses one stick to control each wheel.
             // - This requires no math, but it is hard to drive forward slowly and keep straight.
-             leftPower  = -gamepad1.left_stick_y ;
-             rightPower = -gamepad1.right_stick_y ;
+             leftPower  = gamepad1.left_stick_y ;
+             rightPower = gamepad1.right_stick_y ;
 
             // Send calculated power to wheels
             leftBackMotor.setPower(leftPower);
             rightBackMotor.setPower(rightPower);
             leftFrontMotor.setPower(leftPower);
             rightFrontMotor.setPower(rightPower);
+
+            leftPower2 = gamepad1.left_stick_x;
+            rightPower2 = gamepad1.right_stick_x;
+
+            leftBackMotor.setPower(-leftPower2);
+            rightBackMotor.setPower(-rightPower2);
+            leftFrontMotor.setPower(leftPower2);
+            rightFrontMotor.setPower(rightPower2);
 
             // Show the elapsed game time and wheel power.
             telemetry.addData("Status", "Run Time: " + runtime.toString());

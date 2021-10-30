@@ -29,6 +29,7 @@
 
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -40,7 +41,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Hardware;
 import com.qualcomm.robotcore.util.Range;
 
-public class NotTeleopBasicOpMode_Linear {
+public class MyHardware {
 
     // Declare OpMode members.
     private ElapsedTime runtime = new ElapsedTime();
@@ -50,7 +51,7 @@ public class NotTeleopBasicOpMode_Linear {
     public DcMotor rightMotorBack = null;
     public DcMotor arm = null;
     public Servo claw = null;
-
+    BNO055IMU imu;
 
     public final static double CLAW_HOME = 0.5; // Starting position
     public final static double CLAW_MIN_RANGE = 0.2; // Smallest number allowed for servo position
@@ -61,27 +62,43 @@ public class NotTeleopBasicOpMode_Linear {
 
 
     public void init(HardwareMap ahwMap) {
-
         hwMap = ahwMap;
 
+        //wheels: DcMotor
         leftMotorFront = hwMap.dcMotor.get("fl");
         leftMotorBack = hwMap.dcMotor.get("lb");
         rightMotorFront = hwMap.dcMotor.get("fr");
         rightMotorBack = hwMap.dcMotor.get("rb");
-        arm = hwMap.dcMotor.get("arm");
+        rightMotorFront.setDirection(DcMotor.Direction.REVERSE);
         leftMotorFront.setDirection(DcMotor.Direction.REVERSE);
-        leftMotorBack.setDirection(DcMotor.Direction.REVERSE);
-
+        // Ensure the robot it stationary, then reset the encoders and calibrate the gyro.
+        leftMotorFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        leftMotorBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rightMotorBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rightMotorFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         leftMotorBack.setPower(0);
         leftMotorFront.setPower(0);
         rightMotorBack.setPower(0);
         rightMotorFront.setPower(0);
-        arm.setPower(0);
+        leftMotorFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        leftMotorBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        rightMotorBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        rightMotorFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
-        claw = hwMap.servo.get("claw");
-        claw.setPosition(CLAW_HOME);
+        //arm: DcMotor
+       // arm = hwMap.dcMotor.get("arm");
+        //arm.setPower(0);
 
+        //claw: servo
+        //claw = hwMap.servo.get("claw");
+        //claw.setPosition(CLAW_HOME);
 
+        //imu: gyro sensor
+        BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
+        parameters.angleUnit = BNO055IMU.AngleUnit.DEGREES;
+        parameters.calibrationDataFile = "BNO055IMUCalibration.json";
+        imu = hwMap.get(BNO055IMU.class,"imu");
+        imu.initialize(parameters);
     }
 }
 
