@@ -34,9 +34,11 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
+/*
+Basic autonomous using encoders to stay on course.
+ */
 
-
-@Autonomous(name = "Storage", group = "Auto")
+@Autonomous(name = "Auto", group = "Auto")
 //@Disabled
 public class PiAuto extends LinearOpMode {
 

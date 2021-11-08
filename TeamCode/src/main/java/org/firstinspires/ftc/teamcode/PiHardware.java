@@ -35,6 +35,10 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+/*
+Hardware class for Pi robot.
+Do all your hardware setup here.
+ */
 public class PiHardware {
 
     public final static double CLAW_HOME = 0.5; // Starting position
@@ -53,7 +57,7 @@ public class PiHardware {
     private ElapsedTime period = new ElapsedTime();
 
 
-    public PiHardware(){
+    public PiHardware() {
 
     }
 
@@ -82,12 +86,12 @@ public class PiHardware {
         rightMotorFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         //arm: DcMotor
-        // arm = hwMap.dcMotor.get("arm");
-        //arm.setPower(0);
+        arm = hwMap.dcMotor.get("arm");
+        arm.setPower(0);
 
         //claw: servo
-        //claw = hwMap.servo.get("claw");
-        //claw.setPosition(CLAW_HOME);
+        claw = hwMap.servo.get("claw");
+        claw.setPosition(CLAW_HOME);
 
         //imu: gyro sensor
         BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
