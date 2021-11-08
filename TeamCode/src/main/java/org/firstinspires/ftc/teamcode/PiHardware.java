@@ -30,21 +30,16 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
-import com.qualcomm.robotcore.util.Hardware;
-import com.qualcomm.robotcore.util.Range;
 
-public class MyHardware {
+public class PiHardware {
 
-    // Declare OpMode members.
-    private ElapsedTime runtime = new ElapsedTime();
+    public final static double CLAW_HOME = 0.5; // Starting position
+    public final static double CLAW_MIN_RANGE = 0.2; // Smallest number allowed for servo position
+    public final static double CLAW_MAX_RANGE = 0.8; // Largest number allowed for servo position
     public DcMotor leftMotorFront = null;
     public DcMotor rightMotorFront = null;
     public DcMotor leftMotorBack = null;
@@ -52,23 +47,24 @@ public class MyHardware {
     public DcMotor arm = null;
     public Servo claw = null;
     BNO055IMU imu;
-
-    public final static double CLAW_HOME = 0.5; // Starting position
-    public final static double CLAW_MIN_RANGE = 0.2; // Smallest number allowed for servo position
-    public final static double CLAW_MAX_RANGE = 0.8; // Largest number allowed for servo position
-
     HardwareMap hwMap = null;
+    // Declare OpMode members.
+    private ElapsedTime runtime = new ElapsedTime();
     private ElapsedTime period = new ElapsedTime();
 
+
+    public PiHardware(){
+
+    }
 
     public void init(HardwareMap ahwMap) {
         hwMap = ahwMap;
 
         //wheels: DcMotor
-        leftMotorFront = hwMap.dcMotor.get("fl");
-        leftMotorBack = hwMap.dcMotor.get("lb");
-        rightMotorFront = hwMap.dcMotor.get("fr");
-        rightMotorBack = hwMap.dcMotor.get("rb");
+        leftMotorFront = hwMap.dcMotor.get("motor_left");
+        leftMotorBack = hwMap.dcMotor.get("motor_left2");
+        rightMotorFront = hwMap.dcMotor.get("motor_right");
+        rightMotorBack = hwMap.dcMotor.get("motor_right2");
         rightMotorFront.setDirection(DcMotor.Direction.REVERSE);
         leftMotorFront.setDirection(DcMotor.Direction.REVERSE);
         // Ensure the robot it stationary, then reset the encoders and calibrate the gyro.
@@ -86,7 +82,7 @@ public class MyHardware {
         rightMotorFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         //arm: DcMotor
-       // arm = hwMap.dcMotor.get("arm");
+        // arm = hwMap.dcMotor.get("arm");
         //arm.setPower(0);
 
         //claw: servo
@@ -97,7 +93,7 @@ public class MyHardware {
         BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
         parameters.angleUnit = BNO055IMU.AngleUnit.DEGREES;
         parameters.calibrationDataFile = "BNO055IMUCalibration.json";
-        imu = hwMap.get(BNO055IMU.class,"imu");
+        imu = hwMap.get(BNO055IMU.class, "imu");
         imu.initialize(parameters);
     }
 }

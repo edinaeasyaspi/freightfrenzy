@@ -1,19 +1,17 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
 @TeleOp(name="MyTeleop", group="Linear Opmode")
-//@Disabled
+@Disabled
 public class MyTeleop extends LinearOpMode {
 
     // Declare OpMode members.
-    MyHardware robot = new MyHardware();
+    PiHardware robot = new PiHardware();
     private ElapsedTime runtime = new ElapsedTime();
     double clawPosition = robot.CLAW_HOME;
     final double CLAW_SPEED = 0.01;
