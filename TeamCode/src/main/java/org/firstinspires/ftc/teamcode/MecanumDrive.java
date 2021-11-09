@@ -65,10 +65,12 @@ public class MecanumDrive {
 
         final double direction = Math.atan2(x, y);
 
-        powers[0] = (speed * Math.sin(direction + Math.PI / 4.0) + rotation) * currentPower;
-        powers[3] = (speed * Math.cos(direction + Math.PI / 4.0) - rotation) * currentPower;
-        powers[1] = (speed * Math.cos(direction + Math.PI / 4.0) + rotation) * currentPower;
-        powers[2] = (speed * Math.sin(direction + Math.PI / 4.0) - rotation) * currentPower;
+        double vSin = speed * Math.sin(direction + Math.PI / 4.0);
+        double vCos = speed * Math.cos(direction + Math.PI / 4.0);
+        powers[0] = (vSin + rotation) * currentPower;
+        powers[1] = (vCos + rotation) * currentPower;
+        powers[2] = (vSin - rotation) * currentPower;
+        powers[3] = (vCos - rotation) * currentPower;
 
         double max = Collections.max(Arrays.asList(1.0, Math.abs(powers[0]),
                 Math.abs(powers[1]), Math.abs(powers[2]), Math.abs(powers[3])));

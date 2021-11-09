@@ -67,7 +67,7 @@ public class PiAuto extends LinearOpMode {
         encoderDrive(DRIVE_SPEED, 12, 12, 5.0);  // S1: Forward 12 Inches with 5 Sec timeout
         encoderDrive(TURN_SPEED, -3, 3, 4.0);  // S2: Turn left with 4 Sec timeout
         encoderDrive(DRIVE_SPEED, 12, 12, 5.0);  // S3: Forward 12 Inches with 5 Sec timeout
-        encoderDrive(DRIVE_SPEED, -1, -1, 4.0);  // S3: Reverse 1 Inche with 3 Sec timeout
+        encoderDrive(DRIVE_SPEED, -1, -1, 4.0);  // S3: Reverse 1 Inch with 3 Sec timeout
 
         telemetry.addData("Path", "Complete");
         telemetry.update();

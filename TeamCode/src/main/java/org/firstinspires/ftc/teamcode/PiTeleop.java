@@ -1,6 +1,5 @@
 package org.firstinspires.ftc.teamcode;
 
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -9,16 +8,16 @@ import com.qualcomm.robotcore.util.Range;
 Simple linear opMode using mecanum drive.
  */
 
-@TeleOp(name="TeleOp", group="TeleOp")
+@TeleOp(name = "TeleOp", group = "TeleOp")
 //@Disabled
 public class PiTeleop extends LinearOpMode {
 
-    // Declare OpMode members.
-    PiHardware robot = new PiHardware();
-    private ElapsedTime runtime = new ElapsedTime();
-    double clawPosition = robot.CLAW_HOME;
     final double CLAW_SPEED = 0.01;
     final double ARM_SPEED = .2;
+    // Declare OpMode members.
+    PiHardware robot = new PiHardware();
+    double clawPosition = robot.CLAW_HOME;
+    private ElapsedTime runtime = new ElapsedTime();
 
     @Override
     public void runOpMode() {
@@ -32,6 +31,7 @@ public class PiTeleop extends LinearOpMode {
 
         while (opModeIsActive()) {
             drive.setVelocity(gamepad1.left_stick_x, gamepad1.left_stick_y, gamepad1.right_stick_x, gamepad1.left_stick_button);
+            drive.update();
 
             if (gamepad1.a)
                 clawPosition += CLAW_SPEED;

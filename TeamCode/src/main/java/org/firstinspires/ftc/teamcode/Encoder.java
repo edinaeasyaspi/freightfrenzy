@@ -39,7 +39,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 
 @Autonomous(name="Encoder", group="Linear Opmode")
-@Disabled
+//@Disabled
 public class Encoder extends LinearOpMode {
 
     static final int MOTOR_TICK_COUNTS = 1120;

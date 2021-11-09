@@ -42,7 +42,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 
 @Autonomous(name="MyAuto")
-@Disabled
+//@Disabled
 public class MyAuto extends LinearOpMode {
 
     /* Declare OpMode members. */
