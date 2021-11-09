@@ -17,7 +17,7 @@ public class PiTeleop extends LinearOpMode {
     // Declare OpMode members.
     PiHardware robot = new PiHardware();
     double clawPosition = robot.CLAW_HOME;
-    private ElapsedTime runtime = new ElapsedTime();
+    private ElapsedTime runtime = robot.runtime;
 
     @Override
     public void runOpMode() {
