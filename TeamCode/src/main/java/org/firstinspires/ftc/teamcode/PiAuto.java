@@ -50,7 +50,7 @@ public class PiAuto extends LinearOpMode {
     // Calculated at start of opMode.
     static double COUNTS_PER_INCH = COUNTS_PER_MOTOR_REV;
     /* Declare OpMode members. */
-    private MyHardware robot = new MyHardware();
+    private PiHardware robot = new PiHardware();
     private ElapsedTime runtime = new ElapsedTime();
 
     @Override

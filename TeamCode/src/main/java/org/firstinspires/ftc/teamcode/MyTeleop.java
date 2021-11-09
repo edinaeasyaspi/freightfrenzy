@@ -11,7 +11,7 @@ import com.qualcomm.robotcore.util.Range;
 public class MyTeleop extends LinearOpMode {
 
     // Declare OpMode members.
-    PiHardware robot = new PiHardware();
+    MyHardware robot = new MyHardware();
     private ElapsedTime runtime = new ElapsedTime();
     double clawPosition = robot.CLAW_HOME;
     final double CLAW_SPEED = 0.01;
