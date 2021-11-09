@@ -31,6 +31,7 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -44,17 +45,17 @@ public class PiHardware {
     public final static double CLAW_HOME = 0.5; // Starting position
     public final static double CLAW_MIN_RANGE = 0.2; // Smallest number allowed for servo position
     public final static double CLAW_MAX_RANGE = 0.8; // Largest number allowed for servo position
-    public DcMotor leftMotorFront = null;
-    public DcMotor rightMotorFront = null;
-    public DcMotor leftMotorBack = null;
-    public DcMotor rightMotorBack = null;
+    public DcMotorEx leftMotorFront = null;
+    public DcMotorEx rightMotorFront = null;
+    public DcMotorEx leftMotorBack = null;
+    public DcMotorEx rightMotorBack = null;
     public DcMotor arm = null;
     public Servo claw = null;
     BNO055IMU imu;
     HardwareMap hwMap = null;
     // Declare OpMode members.
-    private ElapsedTime runtime = new ElapsedTime();
-    private ElapsedTime period = new ElapsedTime();
+    public ElapsedTime runtime = new ElapsedTime();
+    public ElapsedTime period = new ElapsedTime();
 
 
     public PiHardware() {
@@ -65,25 +66,25 @@ public class PiHardware {
         hwMap = ahwMap;
 
         //wheels: DcMotor
-        leftMotorFront = hwMap.dcMotor.get("motor_left");
-        leftMotorBack = hwMap.dcMotor.get("motor_left2");
-        rightMotorFront = hwMap.dcMotor.get("motor_right");
-        rightMotorBack = hwMap.dcMotor.get("motor_right2");
-        rightMotorFront.setDirection(DcMotor.Direction.REVERSE);
-        leftMotorFront.setDirection(DcMotor.Direction.REVERSE);
+        leftMotorFront = (DcMotorEx) hwMap.dcMotor.get("motor_left");
+        leftMotorBack = (DcMotorEx) hwMap.dcMotor.get("motor_left2");
+        rightMotorFront = (DcMotorEx) hwMap.dcMotor.get("motor_right");
+        rightMotorBack = (DcMotorEx) hwMap.dcMotor.get("motor_right2");
+        rightMotorFront.setDirection(DcMotorEx.Direction.REVERSE);
+        leftMotorFront.setDirection(DcMotorEx.Direction.REVERSE);
         // Ensure the robot it stationary, then reset the encoders and calibrate the gyro.
-        leftMotorFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        leftMotorBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        rightMotorBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        rightMotorFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        leftMotorFront.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
+        leftMotorBack.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
+        rightMotorBack.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
+        rightMotorFront.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
         leftMotorBack.setPower(0);
         leftMotorFront.setPower(0);
         rightMotorBack.setPower(0);
         rightMotorFront.setPower(0);
-        leftMotorFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        leftMotorBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        rightMotorBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        rightMotorFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        leftMotorFront.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
+        leftMotorBack.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
+        rightMotorBack.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
+        rightMotorFront.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
 
         //arm: DcMotor
         arm = hwMap.dcMotor.get("arm");
