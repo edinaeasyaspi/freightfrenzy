@@ -46,7 +46,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 public class MyAuto extends LinearOpMode {
 
     /* Declare OpMode members. */
-    PiHardware robot = new PiHardware();
+    MyHardware robot = new MyHardware();
 
     static final double     COUNTS_PER_MOTOR_REV    = 1440 ;    // eg: TETRIX Motor Encoder
     static final double     DRIVE_GEAR_REDUCTION    = 2.0 ;     // This is < 1.0 if geared UP
