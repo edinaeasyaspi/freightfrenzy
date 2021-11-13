@@ -51,6 +51,7 @@ public class MyHardware {
     public DcMotor rightMotorBack = null;
     public DcMotor arm = null;
     public Servo claw = null;
+    public DcMotor carouselSpinner = null;
     BNO055IMU imu;
 
     public final static double CLAW_HOME = 0.5; // Starting position
@@ -69,8 +70,8 @@ public class MyHardware {
         leftMotorBack = hwMap.dcMotor.get("lb");
         rightMotorFront = hwMap.dcMotor.get("fr");
         rightMotorBack = hwMap.dcMotor.get("rb");
-        rightMotorFront.setDirection(DcMotor.Direction.REVERSE);
-        leftMotorFront.setDirection(DcMotor.Direction.REVERSE);
+        leftMotorFront.setDirection(DcMotorSimple.Direction.REVERSE);
+        leftMotorBack.setDirection(DcMotorSimple.Direction.REVERSE);
         // Ensure the robot it stationary, then reset the encoders and calibrate the gyro.
         leftMotorFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         leftMotorBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -86,15 +87,20 @@ public class MyHardware {
         rightMotorFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         //arm: DcMotor
-       // arm = hwMap.dcMotor.get("arm");
-        //arm.setPower(0);
+        arm = hwMap.dcMotor.get("arm");
+        arm.setPower(0);
 
-        //claw: servo
-        //claw = hwMap.servo.get("claw");
-        //claw.setPosition(CLAW_HOME);
+        //claw: Servo
+        claw = hwMap.servo.get("claw");
+        claw.setPosition(CLAW_HOME);
+
+        //carousel spinner: DcMotor
+        carouselSpinner = hwMap.dcMotor.get("cs");
+        carouselSpinner.setPower(0);
+
 
         //imu: gyro sensor
-        BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
+       BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
         parameters.angleUnit = BNO055IMU.AngleUnit.DEGREES;
         parameters.calibrationDataFile = "BNO055IMUCalibration.json";
         imu = hwMap.get(BNO055IMU.class,"imu");

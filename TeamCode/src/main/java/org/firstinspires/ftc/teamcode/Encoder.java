@@ -34,97 +34,119 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 
-@Autonomous(name="Encoder", group="Linear Opmode")
-@Disabled
+@Autonomous(name="Encoder_Auto", group="Linear Opmode")
+//@Disabled
 public class Encoder extends LinearOpMode {
 
-    static final int MOTOR_TICK_COUNTS = 1120;
+    static final double MOTOR_TICK_COUNTS = 537.6;
 
-
+    MyHardware robot = new MyHardware();
     private ElapsedTime runtime = new ElapsedTime();
-    private DcMotor leftDrive = null;
-    private DcMotor rightDrive = null;
-    private DcMotor leftDrive2 = null;
-    private DcMotor rightDrive2 = null;
 
-    ModernRoboticsI2cGyro gyro    = null;                    // Additional Gyro device
-
-
-
-    DcMotor leftMotor;
-    DcMotor rightMotor;
-    DcMotor leftMotor2;
-    DcMotor rightMotor2;
-
+    ModernRoboticsI2cGyro gyro = null;                    // Additional Gyro device
     double power = 0.5;
-
 
     @Override
     public void runOpMode() {
+
+        robot.init(hardwareMap);
+
         telemetry.addData("Status", "Initialized");
         telemetry.update();
-
-        leftMotor = hardwareMap.dcMotor.get("fl");
-        rightMotor = hardwareMap.dcMotor.get("rb");
-        leftMotor2 = hardwareMap.dcMotor.get("lb");
-        rightMotor2 = hardwareMap.dcMotor.get("fr");
-
-        rightMotor.setDirection(DcMotor.Direction.REVERSE);
-        rightMotor2.setDirection(DcMotor.Direction.REVERSE);
 
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
         runtime.reset();
+       /* robot.leftMotorFront.setPower(0);
+        robot.rightMotorBack.setPower(power);
+        robot.leftMotorBack.setPower(0);
+        robot.rightMotorFront.setPower(power);
 
-        //reset encoders
-        leftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        rightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        leftMotor2.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        rightMotor2.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        sleep(1800);*/
 
-        //how many turns do I need for the wheels to go 18 inches?
-        //the distance you drive with one turn of the wheel is the circumference of the wheel
-        double circumference = 3.14*2.938; //pi*diameter
-        double rotationsNeeded = 18/circumference;
-        int encoderDrivingTarget = (int)(rotationsNeeded*1120);
 
-        //set the target positions
-        leftMotor.setTargetPosition(encoderDrivingTarget);
-        rightMotor.setTargetPosition(encoderDrivingTarget);
-        leftMotor2.setTargetPosition(encoderDrivingTarget);
-        rightMotor2.setTargetPosition(encoderDrivingTarget);
 
-        //set the power desired for the motors
-        leftMotor.setPower(power);
-        rightMotor.setPower(power);
-        leftMotor2.setPower(power);
-        rightMotor2.setPower(power);
+        //Go forward
+        runtime.startTime();
+        encoderDrive(100);
+        double time = runtime.time();
+       /* sleep(1000);
+        robot.leftMotorFront.setPower(0.2);
+        robot.rightMotorBack.setPower(0.2);
+        robot.leftMotorBack.setPower(0.2);
+        robot.rightMotorFront.setPower(0.2);
+        encoderDrive(4);
+        sleep(500);
+*/
+        //Spin Carousel Spinner for 5 seconds at a slow power
+       // robot.carouselSpinner.setPower(0.5);
+        //sleep(5000);
 
-        //set the motors to RUN_TO_POSITION
-        leftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        rightMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        leftMotor2.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        rightMotor2.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-        while (leftMotor.isBusy() || rightMotor.isBusy() || leftMotor2.isBusy() || rightMotor2.isBusy()) {
+        //Go backwards for 106 inches
+       /* encoderDrive(-103);
+        sleep(1000);
+        robot.leftMotorFront.setPower(0.2);
+        robot.rightMotorBack.setPower(0.2);
+        robot.leftMotorBack.setPower(0.2);
+        robot.rightMotorFront.setPower(0.2);
+        encoderDrive(-3);
+        sleep(500);
+*/
+        while (robot.leftMotorFront.isBusy() || robot.rightMotorBack.isBusy() || robot.leftMotorBack.isBusy() || robot.rightMotorFront.isBusy()) {
             //essentially do nothing while you wait for the robot to finish driving to the position
             telemetry.addData("Path", "Driving 18 inches");
+            telemetry.update();
+            telemetry.addData("time (%f)", time);
             telemetry.update();
         }
 
         //Stop
-        leftMotor.setPower(0);
-        rightMotor.setPower(0);
-        leftMotor2.setPower(0);
-        rightMotor2.setPower(0);
+        robot.leftMotorFront.setPower(0);
+        robot.rightMotorBack.setPower(0);
+        robot.leftMotorBack.setPower(0);
+        robot.rightMotorFront.setPower(0);
 
         telemetry.addData("Path", "Complete");
         telemetry.update();
 
-        }
     }
+
+    public void encoderDrive(double length) {
+        //reset encoders
+        robot.leftMotorFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.rightMotorBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.leftMotorBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.rightMotorFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+        //how many turns do I need for the wheels to go x inches?
+        //the distance you drive with one turn of the wheel is the circumference of the wheel
+        double circumference = 3.14 * 2.95; //pi*diameter
+        double rotationsNeeded = length / circumference;
+        int encoderDrivingTarget = (int) (rotationsNeeded * MOTOR_TICK_COUNTS);
+
+        //set the target positions
+        robot.leftMotorFront.setTargetPosition(encoderDrivingTarget);
+        robot.rightMotorBack.setTargetPosition(encoderDrivingTarget);
+        robot.leftMotorBack.setTargetPosition(encoderDrivingTarget);
+        robot.rightMotorFront.setTargetPosition(encoderDrivingTarget);
+
+        //set the power desired for the motors
+        robot.leftMotorFront.setPower(power);
+        robot.rightMotorBack.setPower(power);
+        robot.leftMotorBack.setPower(power);
+        robot.rightMotorFront.setPower(power);
+
+        //set the motors to RUN_TO_POSITION
+        robot.leftMotorFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        robot.rightMotorBack.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        robot.leftMotorBack.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        robot.rightMotorFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+        }
+
+    }
+
 

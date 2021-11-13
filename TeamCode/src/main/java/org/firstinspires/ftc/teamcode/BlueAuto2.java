@@ -29,37 +29,34 @@
 
 package org.firstinspires.ftc.teamcode;
 
-import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cGyro;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
-import org.firstinspires.ftc.robotcontroller.external.samples.HardwarePushbot;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 
-@Autonomous(name="MyAuto")
+@Autonomous(name="Bluecs2")
 //@Disabled
-public class MyAuto extends LinearOpMode {
+public class BlueAuto2 extends LinearOpMode {
 
     /* Declare OpMode members. */
     MyHardware robot = new MyHardware();
 
-    static final double     COUNTS_PER_MOTOR_REV    = 1440 ;    // eg: TETRIX Motor Encoder
+    static final double     COUNTS_PER_MOTOR_REV    = 537.6 ;    // eg: TETRIX Motor Encoder
     static final double     DRIVE_GEAR_REDUCTION    = 2.0 ;     // This is < 1.0 if geared UP
-    static final double     WHEEL_DIAMETER_INCHES   = 4.0 ;     // For figuring circumference
+    static final double     WHEEL_DIAMETER_INCHES   = 2.95 ;     // For figuring circumference
     static final double     COUNTS_PER_INCH         = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) /
-                                                      (WHEEL_DIAMETER_INCHES * 3.1415);
+            (WHEEL_DIAMETER_INCHES * 3.1415);
 
     // These constants define the desired driving/control characteristics
     // The can/should be tweaked to suite the specific robot drive train.
-    static final double     DRIVE_SPEED             = 0.7;     // Nominal speed for better accuracy.
-    static final double     TURN_SPEED              = 0.5;     // Nominal half speed for better accuracy.
+    static final double     DRIVE_SPEED             = 0.3;     // Nominal speed for better accuracy.
+    static final double     TURN_SPEED              = 0.1;     // Nominal half speed for better accuracy.
 
     static final double     HEADING_THRESHOLD       = 1 ;      // As tight as we can make it with an integer gyro
     static final double     P_TURN_COEFF            = 0.1;     // Larger is more responsive, but also less stable
@@ -76,51 +73,36 @@ public class MyAuto extends LinearOpMode {
          */
         robot.init(hardwareMap);
 
-        angles = robot.imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
-        telemetry.addData("Heading: ", angles.firstAngle);
-        telemetry.addData("Roll: ", angles.secondAngle);
-        telemetry.addData("Pitch: ", angles.thirdAngle);
-        telemetry.update();
+        waitForStart();
 
-        // Send telemetry message to alert driver that we are calibrating;
-        telemetry.addData(">", "Calibrating Gyro");
-        telemetry.update();
+        gyroDrive(DRIVE_SPEED, 26, -45);    // Drive forward 23 inches
+        gyroTurn(TURN_SPEED,0);
+        gyroHold(TURN_SPEED,0,0.5);
+        // gyroTurn( TURN_SPEED, 90.0);         // Turn right 90 degrees
+        // gyroHold( TURN_SPEED, 90.0, 0.5);    // Adjust turn with imu gyro sensor
+        // gyroDrive(DRIVE_SPEED,6,90);
+        // gyroTurn(TURN_SPEED,0);
+        // gyroHold(TURN_SPEED,0,0.5);
+        gyroDrive(DRIVE_SPEED,-11,0);
+        gyroTurn(TURN_SPEED,-90);
+        gyroHold(TURN_SPEED,-90,0.5);
+        gyroDrive(DRIVE_SPEED,-46,-90);
+        gyroTurn(TURN_SPEED,0);
+        gyroHold(TURN_SPEED,0,0.5);
+        gyroDrive(DRIVE_SPEED,-6,0);  //Drive backwards 6 inches to spin carousel
+        if(opModeIsActive()) {
 
-       // gyro.calibrate();
+            robot.carouselSpinner.setPower(-1);   //Spin carousel spinner at slow speed for 2 seconds
 
-        // make sure the gyro is calibrated before continuing
-       // while (!isStopRequested() && gyro.isCalibrating())  {
-         //   sleep(50);
-          //  idle();
-        //}
-
-        telemetry.addData(">", "Robot Ready.");    //
-        telemetry.update();
-
-        // Wait for the game to start (Display Gyro value), and reset gyro before we move..
-        while (!isStarted()) {
-            telemetry.addData(">", "Robot Heading = %d", angles.firstAngle);
-            telemetry.update();
+            sleep(4000);
+            robot.carouselSpinner.setPower(0);
         }
-
-       // gyro.resetZAxisIntegrator();
-
-        // Step through each leg of the path,
-        // Note: Reverse movement is obtained by setting a negative distance (not speed)
-        // Put a hold after each turn
-        gyroDrive(DRIVE_SPEED, 48.0, 0.0);    // Drive FWD 48 inches
-        gyroTurn( TURN_SPEED, -45.0);         // Turn  CCW to -45 Degrees
-        gyroHold( TURN_SPEED, -45.0, 0.5);    // Hold -45 Deg heading for a 1/2 second
-        gyroDrive(DRIVE_SPEED, 12.0, -45.0);  // Drive FWD 12 inches at 45 degrees
-        gyroTurn( TURN_SPEED,  45.0);         // Turn  CW  to  45 Degrees
-        gyroHold( TURN_SPEED,  45.0, 0.5);    // Hold  45 Deg heading for a 1/2 second
-        gyroTurn( TURN_SPEED,   0.0);         // Turn  CW  to   0 Degrees
-        gyroHold( TURN_SPEED,   0.0, 1.0);    // Hold  0 Deg heading for a 1 second
-        gyroDrive(DRIVE_SPEED,-48.0, 0.0);    // Drive REV 48 inches
-
-        telemetry.addData("Path", "Complete");
-        telemetry.update();
+        gyroDrive(DRIVE_SPEED, 2, 0); //Drive forward 106 inches and park
+        gyroTurn(TURN_SPEED,-90);
+        gyroHold(TURN_SPEED,-90,0.5);
+        gyroDrive(1,90,-90);
     }
+
 
     public void gyroDrive ( double speed,
                             double distance,
@@ -165,10 +147,12 @@ public class MyAuto extends LinearOpMode {
             robot.rightMotorFront.setPower(speed);
             robot.rightMotorBack.setPower(speed);
 
+
             // keep looping while we are still active, and BOTH motors are running.
             while (opModeIsActive() &&
-                   (robot.leftMotorBack.isBusy() && robot.leftMotorFront.isBusy() && robot.rightMotorFront.isBusy() && robot.rightMotorBack.isBusy())) {
+                    (robot.leftMotorBack.isBusy() && robot.leftMotorFront.isBusy() && robot.rightMotorFront.isBusy() && robot.rightMotorBack.isBusy())) {
 
+                angles = robot.imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
                 // adjust relative speed based on heading error.
                 error = getError(angle);
                 steer = getSteer(error, P_DRIVE_COEFF);
@@ -189,16 +173,17 @@ public class MyAuto extends LinearOpMode {
                 }
 
                 robot.leftMotorBack.setPower(leftSpeed);
-                robot.leftMotorFront.setPower(rightSpeed);
-                robot.rightMotorFront.setPower(leftSpeed);
+                robot.leftMotorFront.setPower(leftSpeed);
+                robot.rightMotorFront.setPower(rightSpeed);
                 robot.rightMotorBack.setPower(rightSpeed);
 
                 // Display drive status for the driver.
-                telemetry.addData("Err/St",  "%5.1f/%5.1f",  error, steer);
                 telemetry.addData("Target",  "%7d:%7d",      newLeftTarget,  newRightTarget);
                 telemetry.addData("Actual",  "%7d:%7d",      robot.leftMotorBack.getCurrentPosition(),
-                                                             robot.rightMotorBack.getCurrentPosition());
-                telemetry.addData("Speed",   "%5.2f:%5.2f",  leftSpeed, rightSpeed);
+                        robot.rightMotorBack.getCurrentPosition());
+                telemetry.addData("gyro/Err/St", "%5.2f/%5.2f/%5.2f", angles.firstAngle,error, steer);
+                telemetry.addData("leftSpeed:rightspeed.", "%5.2f:%5.2f", leftSpeed, rightSpeed);
+
                 telemetry.update();
             }
 
@@ -222,7 +207,13 @@ public class MyAuto extends LinearOpMode {
         while (opModeIsActive() && !onHeading(speed, angle, P_TURN_COEFF)) {
             // Update telemetry & Allow time for other processes to run.
             telemetry.update();
+
         }
+        // Stop all motion;
+        robot.leftMotorBack.setPower(0);
+        robot.leftMotorFront.setPower(0);
+        robot.rightMotorBack.setPower(0);
+        robot.rightMotorFront.setPower(0);
     }
 
     public void gyroHold( double speed, double angle, double holdTime) {
@@ -251,6 +242,7 @@ public class MyAuto extends LinearOpMode {
         double leftSpeed;
         double rightSpeed;
 
+        angles = robot.imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
         // determine turn power based on +/- error
         error = getError(angle);
 
@@ -268,14 +260,18 @@ public class MyAuto extends LinearOpMode {
 
         // Send desired speeds to motors.
         robot.leftMotorFront.setPower(leftSpeed);
-        robot.leftMotorBack.setPower(rightSpeed);
-        robot.rightMotorBack.setPower(leftSpeed);
+        robot.leftMotorBack.setPower(leftSpeed);
+        robot.rightMotorBack.setPower(rightSpeed);
         robot.rightMotorFront.setPower(rightSpeed);
 
         // Display it for the driver.
         telemetry.addData("Target", "%5.2f", angle);
-        telemetry.addData("Err/St", "%5.2f/%5.2f", error, steer);
+        telemetry.addData("gyro/Err/St", "%5.2f/%5.2f/%5.2f", angles.firstAngle,error, steer);
         telemetry.addData("Speed.", "%5.2f:%5.2f", leftSpeed, rightSpeed);
+        telemetry.addData("Heading: ", angles.firstAngle);
+        telemetry.addData("Roll: ", angles.secondAngle);
+        telemetry.addData("Pitch: ", angles.thirdAngle);
+
 
         return onTarget;
     }

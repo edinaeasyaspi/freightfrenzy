@@ -11,7 +11,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 
 @Autonomous(name = "IMU")
-@Disabled
+//@Disabled
 public class IMU extends LinearOpMode {
     BNO055IMU imu;
     Orientation angles;
