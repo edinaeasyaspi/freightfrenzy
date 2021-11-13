@@ -59,7 +59,6 @@ public class MyHardware {
     public final static double CLAW_MAX_RANGE = 0.8; // Largest number allowed for servo position
 
     HardwareMap hwMap = null;
-    private ElapsedTime period = new ElapsedTime();
 
 
     public void init(HardwareMap ahwMap) {
@@ -72,7 +71,7 @@ public class MyHardware {
         rightMotorBack = hwMap.dcMotor.get("rb");
         leftMotorFront.setDirection(DcMotorSimple.Direction.REVERSE);
         leftMotorBack.setDirection(DcMotorSimple.Direction.REVERSE);
-        // Ensure the robot it stationary, then reset the encoders and calibrate the gyro.
+        // Ensure the robot it stationary, then reset the encoders
         leftMotorFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         leftMotorBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         rightMotorBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -87,17 +86,16 @@ public class MyHardware {
         rightMotorFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         //arm: DcMotor
-        arm = hwMap.dcMotor.get("arm");
+      /*  arm = hwMap.dcMotor.get("arm");
         arm.setPower(0);
 
         //claw: Servo
         claw = hwMap.servo.get("claw");
         claw.setPosition(CLAW_HOME);
-
+*/
         //carousel spinner: DcMotor
         carouselSpinner = hwMap.dcMotor.get("cs");
         carouselSpinner.setPower(0);
-
 
         //imu: gyro sensor
        BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();

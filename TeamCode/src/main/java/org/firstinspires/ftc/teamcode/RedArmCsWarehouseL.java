@@ -40,14 +40,14 @@ import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 
-@Autonomous(name="Redwh4")
+@Autonomous(name="RedArmCsWarehouseL")
 //@Disabled
-public class RedAuto4 extends LinearOpMode {
+public class RedArmCsWarehouseL extends LinearOpMode {
 
-    /* Declare OpMode members. */
+    // Declare OpMode members
     MyHardware robot = new MyHardware();
 
-    static final double     COUNTS_PER_MOTOR_REV    = 537.6 ;    // eg: TETRIX Motor Encoder
+    static final double     COUNTS_PER_MOTOR_REV    = 537.6 ;    // Tick counts per motor revolution
     static final double     DRIVE_GEAR_REDUCTION    = 2.0 ;     // This is < 1.0 if geared UP
     static final double     WHEEL_DIAMETER_INCHES   = 2.95 ;     // For figuring circumference
     static final double     COUNTS_PER_INCH         = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) /
@@ -74,20 +74,31 @@ public class RedAuto4 extends LinearOpMode {
         robot.init(hardwareMap);
 
         waitForStart();
+        //Turn right 25 degrees
+        gyroTurn(TURN_SPEED,-25);
+        gyroHold(TURN_SPEED,-25,0.5);
+        //Drive forward 8 inches
+        gyroDrive(DRIVE_SPEED, 8, -25);
+        //Turn to the carousel spinner position
+        gyroTurn(TURN_SPEED,-69);
+        gyroHold(TURN_SPEED,-69,0.5);
+        //Drive to the carousel backwards
+        gyroDrive(DRIVE_SPEED,-11.5,-69);
 
-        gyroDrive(DRIVE_SPEED,5,0);
-        gyroTurn(TURN_SPEED,-90);
-        gyroHold(TURN_SPEED,-90,0.5);
-        gyroDrive(DRIVE_SPEED,4,-90);
-        gyroDrive(DRIVE_SPEED, 23, 0.0);    // Drive forward 5 inches
-
-        gyroDrive(DRIVE_SPEED,-18,0);
-        gyroTurn(TURN_SPEED,90);
-        gyroHold(TURN_SPEED,90,0.5);
-        gyroDrive(DRIVE_SPEED,60,90);
+        //Spin the carousel spinner
+        if(opModeIsActive()) {
+            robot.carouselSpinner.setPower(-1);
+            sleep(4000);
+            robot.carouselSpinner.setPower(0);
+        }
+        //Turn to the position of the warehouse and drive to warehouse
+        gyroTurn(TURN_SPEED,-84);
+        gyroHold(TURN_SPEED,-84,0.5);
+        sleep(500);
+        gyroDrive(1,40,-84);
     }
 
-
+    //Modified sample code drive using gyro
     public void gyroDrive ( double speed,
                             double distance,
                             double angle) {
@@ -136,6 +147,7 @@ public class RedAuto4 extends LinearOpMode {
             while (opModeIsActive() &&
                    (robot.leftMotorBack.isBusy() && robot.leftMotorFront.isBusy() && robot.rightMotorFront.isBusy() && robot.rightMotorBack.isBusy())) {
 
+                //Modified getting gyro angle from imu
                 angles = robot.imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
                 // adjust relative speed based on heading error.
                 error = getError(angle);
@@ -185,6 +197,7 @@ public class RedAuto4 extends LinearOpMode {
         }
     }
 
+    //Modified sample code turning with gyro
     public void gyroTurn (  double speed, double angle) {
 
         // keep looping while we are still active, and not on heading.

@@ -40,18 +40,18 @@ import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 
-@Autonomous(name="Redcs2")
+@Autonomous(name="BlueArmCsStorageUnitR")
 //@Disabled
-public class RedAuto2 extends LinearOpMode {
+public class BlueArmCsStorageUnitR extends LinearOpMode {
 
-    /* Declare OpMode members. */
+    // Declare OpMode members
     MyHardware robot = new MyHardware();
 
-    static final double     COUNTS_PER_MOTOR_REV    = 537.6 ;    // eg: TETRIX Motor Encoder
+    static final double     COUNTS_PER_MOTOR_REV    = 537.6 ;    // Tick counts per motor revolution
     static final double     DRIVE_GEAR_REDUCTION    = 2.0 ;     // This is < 1.0 if geared UP
     static final double     WHEEL_DIAMETER_INCHES   = 2.95 ;     // For figuring circumference
     static final double     COUNTS_PER_INCH         = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) /
-                                                      (WHEEL_DIAMETER_INCHES * 3.1415);
+            (WHEEL_DIAMETER_INCHES * 3.1415);
 
     // These constants define the desired driving/control characteristics
     // The can/should be tweaked to suite the specific robot drive train.
@@ -74,30 +74,34 @@ public class RedAuto2 extends LinearOpMode {
         robot.init(hardwareMap);
 
         waitForStart();
+        //Turn left 25 degrees
+        gyroTurn(TURN_SPEED,25);
+        gyroHold(TURN_SPEED,25,0.5);
+        //Drive forward 8 inches
+        gyroDrive(DRIVE_SPEED, 8, 25);
+        //Turn to the carousel spinner position
+        gyroTurn(TURN_SPEED,70);
+        gyroHold(TURN_SPEED,70,0.5);
+        //Drive to the carousel backwards
+        gyroDrive(DRIVE_SPEED,-11.25,70);
 
-        gyroTurn(TURN_SPEED,-25);
-        gyroHold(TURN_SPEED,-25,0.5);
-        gyroDrive(0.1, 8, -25);    // Drive forward 23 inches
-        sleep(1000);
-        gyroTurn(0.1,-70);
-        gyroHold(0.1,-70,0.5);
-       gyroDrive(0.1,-12,-70);
+        //Spin the carousel spinner
         if(opModeIsActive()) {
-
-            robot.carouselSpinner.setPower(-1);   //Spin carousel spinner at slow speed for 2 seconds
-
-            sleep(4000);
+            robot.carouselSpinner.setPower(1);
+            sleep(4500);
             robot.carouselSpinner.setPower(0);
         }
-       // gyroDrive(DRIVE_SPEED, 2, 0); //Drive forward 106 inches and park
-       // gyroTurn(TURN_SPEED,90);
-       // gyroHold(TURN_SPEED,90,0.5);
-        gyroTurn(0.1,-83);
-        gyroHold(0.1,-83,0.5);
-        gyroDrive(1,90,-83);
+        //Move forward in front of storage unit
+        gyroTurn(TURN_SPEED,40);
+        gyroHold(TURN_SPEED,40,0.5);
+        gyroDrive(DRIVE_SPEED,8,40);
+        //Move backwards into the storage unit
+        gyroTurn(TURN_SPEED,90);
+        gyroHold(TURN_SPEED,90,0.5);
+        gyroDrive(DRIVE_SPEED,-5,90);
     }
 
-
+    //Modified sample code drive using gyro
     public void gyroDrive ( double speed,
                             double distance,
                             double angle) {
@@ -144,8 +148,9 @@ public class RedAuto2 extends LinearOpMode {
 
             // keep looping while we are still active, and BOTH motors are running.
             while (opModeIsActive() &&
-                   (robot.leftMotorBack.isBusy() && robot.leftMotorFront.isBusy() && robot.rightMotorFront.isBusy() && robot.rightMotorBack.isBusy())) {
+                    (robot.leftMotorBack.isBusy() && robot.leftMotorFront.isBusy() && robot.rightMotorFront.isBusy() && robot.rightMotorBack.isBusy())) {
 
+                //Modified getting gyro angle from imu
                 angles = robot.imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
                 // adjust relative speed based on heading error.
                 error = getError(angle);
@@ -174,7 +179,7 @@ public class RedAuto2 extends LinearOpMode {
                 // Display drive status for the driver.
                 telemetry.addData("Target",  "%7d:%7d",      newLeftTarget,  newRightTarget);
                 telemetry.addData("Actual",  "%7d:%7d",      robot.leftMotorBack.getCurrentPosition(),
-                                                             robot.rightMotorBack.getCurrentPosition());
+                        robot.rightMotorBack.getCurrentPosition());
                 telemetry.addData("gyro/Err/St", "%5.2f/%5.2f/%5.2f", angles.firstAngle,error, steer);
                 telemetry.addData("leftSpeed:rightspeed.", "%5.2f:%5.2f", leftSpeed, rightSpeed);
 
@@ -195,6 +200,7 @@ public class RedAuto2 extends LinearOpMode {
         }
     }
 
+    //Modified sample code turning with gyro
     public void gyroTurn (  double speed, double angle) {
 
         // keep looping while we are still active, and not on heading.
